@@ -5,6 +5,7 @@ from torch.optim.lr_scheduler import CosineAnnealingLR, CosineAnnealingWarmResta
 import numpy as np
 from config import Config
 import matplotlib.pyplot as plt
+import librosa as lb
 
 
 def show_batch(img_ds, num_items, num_rows, num_cols, predict_arr=None):
@@ -80,3 +81,57 @@ def map_score(solution, submission):
         average='micro',
     )
     return score
+
+
+def compute_melspec(y, sr, n_mels, fmin, fmax):
+    """
+    Computes a mel-spectrogram and puts it at decibel scale
+    Arguments:
+        y {np array} -- signal
+        params {AudioParams} -- Parameters to use for the spectrogram. Expected to have the attributes sr, n_mels, f_min, f_max
+    Returns:
+        np array -- Mel-spectrogram
+    """
+    melspec = lb.feature.melspectrogram(
+        y=y, sr=sr, n_mels=n_mels, fmin=fmin, fmax=fmax,
+    )
+
+    melspec = lb.power_to_db(melspec).astype(np.float32)
+    return melspec
+
+
+def mono_to_color(X, eps=1e-6, mean=None, std=None):
+    mean = mean or X.mean()
+    std = std or X.std()
+    X = (X - mean) / (std + eps)
+
+    _min, _max = X.min(), X.max()
+
+    if (_max - _min) > eps:
+        V = np.clip(X, _min, _max)
+        V = 255 * (V - _min) / (_max - _min)
+        V = V.astype(np.uint8)
+    else:
+        V = np.zeros_like(X, dtype=np.uint8)
+
+    return V
+
+
+def crop_or_pad(y, length, is_train=True, start=None):
+    if len(y) < length:
+        y = np.concatenate([y, np.zeros(length - len(y))])
+
+        n_repeats = length // len(y)
+        epsilon = length % len(y)
+
+        y = np.concatenate([y]*n_repeats + [y[:epsilon]])
+
+    elif len(y) > length:
+        if not is_train:
+            start = start or 0
+        else:
+            start = start or np.random.randint(len(y) - length)
+
+        y = y[start:start + length]
+
+    return y
