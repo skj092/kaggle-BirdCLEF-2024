@@ -8,19 +8,24 @@ from utils import get_optimizer
 
 
 class BirdClefModel(pl.LightningModule):
-    def __init__(self, model_name=Config.model, num_classes=Config.num_classes, pretrained=Config.pretrained):
+    def __init__(
+        self,
+        model_name=Config.model,
+        num_classes=Config.num_classes,
+        pretrained=Config.pretrained,
+    ):
         super().__init__()
         self.num_classes = num_classes
 
         self.backbone = timm.create_model(model_name, pretrained=pretrained)
 
-        if 'res' in model_name:
+        if "res" in model_name:
             self.in_features = self.backbone.fc.in_features
             self.backbone.fc = nn.Linear(self.in_features, num_classes)
-        elif 'dense' in model_name:
+        elif "dense" in model_name:
             self.in_features = self.backbone.classifier.in_features
             self.backbone.classifier = nn.Linear(self.in_features, num_classes)
-        elif 'efficientnet' in model_name:
+        elif "efficientnet" in model_name:
             self.in_features = self.backbone.classifier.in_features
             self.backbone.classifier = nn.Sequential(
                 nn.Linear(self.in_features, num_classes)
@@ -49,16 +54,21 @@ class BirdClefModel(pl.LightningModule):
             y_pred = self(image)
             loss = self.loss_function(y_pred, target)
 
-        self.log("train_loss", loss, on_step=True,
-                 on_epoch=True, prog_bar=True)
+        self.log("train_loss", loss, on_step=True, on_epoch=True, prog_bar=True)
         return loss
 
     def validation_step(self, batch, batch_idx):
         image, target = batch
         y_pred = self(image)
         val_loss = self.loss_function(y_pred, target)
-        self.log("val_loss", val_loss, on_step=True,
-                 on_epoch=True, logger=True, prog_bar=True)
+        self.log(
+            "val_loss",
+            val_loss,
+            on_step=True,
+            on_epoch=True,
+            logger=True,
+            prog_bar=True,
+        )
 
         return {"val_loss": val_loss, "logits": y_pred, "targets": target}
 

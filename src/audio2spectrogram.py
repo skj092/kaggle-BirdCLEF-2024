@@ -23,7 +23,7 @@ def get_audio_info(filepath):
     with SoundFile(filepath) as f:
         sr = f.samplerate
         frames = f.frames
-        duration = float(frames)/sr
+        duration = float(frames) / sr
     return {"frames": frames, "sr": sr, "duration": duration}
 
 
@@ -37,7 +37,11 @@ def compute_melspec(y, sr, n_mels, fmin, fmax):
         np array -- Mel-spectrogram
     """
     melspec = lb.feature.melspectrogram(
-        y=y, sr=sr, n_mels=n_mels, fmin=fmin, fmax=fmax,
+        y=y,
+        sr=sr,
+        n_mels=n_mels,
+        fmin=fmin,
+        fmax=fmax,
     )
 
     melspec = lb.power_to_db(melspec).astype(np.float32)
