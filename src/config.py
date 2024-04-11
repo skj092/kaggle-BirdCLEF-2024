@@ -15,11 +15,11 @@ class Config:
     use_mixup = True
     mixup_alpha = 0.2
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    data_root = "../data/"
-    train_images = "../data/specs/train/"
-    valid_images = "../data/specs/valid/"
-    train_path = "../data/train.csv"
-    valid_path = "../data/valid.csv"
+    data_root = "/home/sonu/personal/BirdCLEF/data"
+    train_images = data_root + "/specs/train/"
+    valid_images = data_root + "/specs/valid/"
+    train_path = data_root + "/train.csv"
+    valid_path = data_root + "/valid.csv"
     SR = 32000
     DURATION = 5
     MAX_READ_SAMPLES = 5
@@ -48,4 +48,4 @@ class test_config:
     DURATION = 5
     LR = 5e-4
 
-    model_ckpt = "exp1/last.ckpt"
+    model_ckpt = "/home/sonu/personal/BirdCLEF/src/exp1/last.ckpt"

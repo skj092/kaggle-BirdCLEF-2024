@@ -54,6 +54,7 @@ class BirdDataset(Dataset):
         impath = self.img_dir + f"{row.filename}.npy"
 
         image = np.load(str(impath))[: Config.MAX_READ_SAMPLES]
+        print(f"Image shape: {image.shape}")
 
         ########## RANDOM SAMPLING ################
         if self.train:

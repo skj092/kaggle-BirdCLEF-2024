@@ -11,6 +11,16 @@ import numpy as np
 from config import Config
 import matplotlib.pyplot as plt
 import librosa as lb
+from soundfile import SoundFile
+
+
+def get_audio_info(filepath):
+    """Get some properties from  an audio file"""
+    with SoundFile(filepath) as f:
+        sr = f.samplerate
+        frames = f.frames
+        duration = float(frames) / sr
+    return {"frames": frames, "sr": sr, "duration": duration}
 
 
 def show_batch(img_ds, num_items, num_rows, num_cols, predict_arr=None):

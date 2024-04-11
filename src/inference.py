@@ -45,7 +45,6 @@ print(f"df_test shape: {df_test.shape}")
 
 
 print("Create Dataloader...")
-
 ds_test = BirdDatasetTest(
     df_test,
     sr=Config.SR,
@@ -54,9 +53,7 @@ ds_test = BirdDatasetTest(
 
 
 audio_model = BirdClefModel()
-
 print("Model Creation")
-
 model = BirdClefModel.load_from_checkpoint(
     Config.model_ckpt, train_dataloader=None, validation_dataloader=None
 )
@@ -70,7 +67,6 @@ filenames = df_test.name.values.tolist()
 
 bird_cols = list(pd.get_dummies(df_train["primary_label"]).columns)
 sub_df = pd.DataFrame(columns=["row_id"] + bird_cols)
-
 print(f"sub_df shape: {sub_df.shape}")
 
 for i, file in enumerate(filenames):

@@ -3,6 +3,7 @@ data/
 *.ckpt
 notebooks/.ipynb_checkpoints/
 src/lightning_logs/
+lightning_logs/
 
 
 

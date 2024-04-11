@@ -36,3 +36,8 @@
 6. Create test dataframe with filename, name, id ,path columns
 7. def transform for augmentation
 8. Define dataset class
+
+
+---------------------------------
+1. preparing dataset
+1. read the audio file with soundfile module
