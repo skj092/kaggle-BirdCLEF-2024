@@ -38,10 +38,10 @@ df_test = pd.DataFrame(
         (path.stem, *path.stem.split("_"), path)
         for path in Path(Config.test_path).glob("*.ogg")
     ],
-    columns=["name", "id", "path"],
+    columns=["filename", "name", "id", "path"],
 )
-df_test["filename"] = df_test["name"]
 print(f"df_test shape: {df_test.shape}")
+print(df_test.head())
 
 
 print("Create Dataloader...")
@@ -63,7 +63,7 @@ preds = predict(ds_test, model)
 
 gc.collect()
 torch.cuda.empty_cache()
-filenames = df_test.name.values.tolist()
+filenames = df_test.filename.values.tolist()
 
 bird_cols = list(pd.get_dummies(df_train["primary_label"]).columns)
 sub_df = pd.DataFrame(columns=["row_id"] + bird_cols)

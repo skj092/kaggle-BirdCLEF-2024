@@ -136,7 +136,6 @@ def main():
     )
     df["len_sec_labels"] = df["secondary_labels"].map(len)
     print(df[df.len_sec_labels > 0].sample(3))
-    df.primary_label.value_counts()
     train_df, valid_df = birds_stratified_split(df, "primary_label", 0.2)
     Config.out_dir_train.mkdir(exist_ok=True, parents=True)
     Config.out_dir_valid.mkdir(exist_ok=True, parents=True)

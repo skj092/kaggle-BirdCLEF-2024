@@ -8,7 +8,6 @@ from config import Config
 from dataset import get_fold_dls
 from models import BirdClefModel
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
-
 warnings.filterwarnings("ignore")
 pl.seed_everything(Config.seed, workers=True)
 
@@ -53,7 +52,8 @@ def run_training(df_train, df_valid):
     )
 
     print("Running trainer.fit")
-    trainer.fit(audio_model, train_dataloaders=dl_train, val_dataloaders=dl_val)
+    trainer.fit(audio_model, train_dataloaders=dl_train,
+                val_dataloaders=dl_val)
 
     gc.collect()
     torch.cuda.empty_cache()
@@ -66,8 +66,10 @@ def main():
 
     Config.num_classes = len(df_train.primary_label.unique())
 
-    df_train = pd.concat([df_train, pd.get_dummies(df_train["primary_label"])], axis=1)
-    df_valid = pd.concat([df_valid, pd.get_dummies(df_valid["primary_label"])], axis=1)
+    df_train = pd.concat(
+        [df_train, pd.get_dummies(df_train["primary_label"])], axis=1)
+    df_valid = pd.concat(
+        [df_valid, pd.get_dummies(df_valid["primary_label"])], axis=1)
 
     # Take a subset
     df_train = df_train.sample(n=100)

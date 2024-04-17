@@ -15,7 +15,7 @@ class Config:
     use_mixup = True
     mixup_alpha = 0.2
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    data_root = "/home/sonu/personal/BirdCLEF/data"
+    data_root = "/home/sonu/personal/kaggle-BirdCLEF/data"
     train_images = data_root + "/specs/train/"
     valid_images = data_root + "/specs/valid/"
     train_path = data_root + "/train.csv"
@@ -36,8 +36,7 @@ class test_config:
     use_mixup = False
     mixup_alpha = 0.2
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    data_root = "/home/sonu/personal/BirdCLEF/data"
+    data_root = "/home/sonu/personal/kaggle-BirdCLEF/data"
     train_images = data_root + "/specs/train/"
     valid_images = data_root + "/specs/valid/"
     train_path = data_root + "/train.csv"
@@ -48,4 +47,4 @@ class test_config:
     DURATION = 5
     LR = 5e-4
 
-    model_ckpt = "/home/sonu/personal/BirdCLEF/src/exp1/last.ckpt"
+    model_ckpt = "/home/sonu/personal/kaggle-BirdCLEF/src/exp1/last.ckpt"

@@ -135,7 +135,8 @@ class BirdDatasetTest(Dataset):
         return image
 
     def audio_to_image(self, audio):
-        melspec = compute_melspec(audio, self.sr, self.n_mels, self.fmin, self.fmax)
+        melspec = compute_melspec(
+            audio, self.sr, self.n_mels, self.fmin, self.fmax)
         image = mono_to_color(melspec)
         image = self.normalize(image)
         return image
@@ -144,7 +145,8 @@ class BirdDatasetTest(Dataset):
         audio, orig_sr = sf.read(filepath, dtype="float32")
 
         if self.resample and orig_sr != self.sr:
-            audio = lb.resample(audio, orig_sr, self.sr, res_type=self.res_type)
+            audio = lb.resample(audio, orig_sr, self.sr,
+                                res_type=self.res_type)
 
         audios = []
         for i in range(self.audio_length, len(audio) + self.step, self.step):
