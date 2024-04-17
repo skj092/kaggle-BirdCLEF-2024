@@ -4,7 +4,11 @@ import timm
 from config import Config
 from torchtoolbox.tools import mixup_data, mixup_criterion
 from torch.nn.functional import cross_entropy
-from utils import get_optimizer
+from utils import get_optimizer, padded_cmap
+import torch
+import pandas as pd
+import pickle
+import sklearn
 
 
 class BirdClefModel(pl.LightningModule):
@@ -54,7 +58,8 @@ class BirdClefModel(pl.LightningModule):
             y_pred = self(image)
             loss = self.loss_function(y_pred, target)
 
-        self.log("train_loss", loss, on_step=True, on_epoch=True, prog_bar=True)
+        self.log("train_loss", loss, on_step=True,
+                 on_epoch=True, prog_bar=True)
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -77,3 +82,23 @@ class BirdClefModel(pl.LightningModule):
 
     def validation_dataloader(self):
         return self._validation_dataloader
+
+    def on_validation_batch_end(self, outputs, batch, batch_idx, dataloader_idx=0):
+        if batch_idx == 0:
+            self._logits = []
+            self._targets = []
+            self._val_loss = []
+
+        self._logits.append(outputs["logits"])
+        self._targets.append(outputs["targets"])
+        self._val_loss.append(outputs["val_loss"])
+
+    def on_validation_epoch_end(self):
+        output_val = torch.cat(
+            self._logits, dim=0).sigmoid().cpu().detach().numpy()
+        target_val = torch.cat(self._targets, dim=0).cpu().detach().numpy()
+        avg_loss = torch.stack(self._val_loss).mean()
+        print(output_val.shape, target_val.shape, avg_loss)
+        score = sklearn.metrics.roc_auc_score(
+            target_val, output_val, average="macro")
+        print(f"Validation AUC: {score}")

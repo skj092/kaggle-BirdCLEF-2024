@@ -59,10 +59,31 @@ Pytorch Lightning Inference
 * No, we convert this mini audio vector to spectrogram. We get spectrogram of shape (128 * x), we can confiture what shape we want.
 
 ## Submission
+
 1. Data: 25% | Ecpoch 2 | LB: 0.57
+
+## How do we represet sound digitally
+
+To digitize a sound wave we must turn the signal into a series of numbers so that we can input it into our models. This is done by measuring the amplitude of the sound at fixed intervals of time.
+
+![image](./static/sound-wave-digital.webp)
+
+Each such measurement is called a sample, and the sample rate is the number of samples per second. For instance, a common sampling rate is about 44,100 samples per second. That means that a 10-second music clip would have 441,000 samples!
 
 ## Resources
 
 1. Convert Audio To Spectrogram: <https://www.kaggle.com/code/nischaydnk/split-creating-melspecs-stage-1>
 2. Pytorch Lightning Inferece: <https://www.kaggle.com/code/nischaydnk/birdclef-2023-pytorch-lightning-inference>
 3. Pytorch LIghtning training: <https://www.kaggle.com/code/nischaydnk/birdclef-2023-pytorch-lightning-training-w-cmap>
+4. Audio Deep Learning: <https://www.kaggle.com/competitions/birdclef-2024/discussion/491668>
+
+------------------------------------------
+
+1. What is an audio?
+2. How to represent audio digitally?
+3. How to preprocess audio data?
+4. Whole pipeline in mathematical term.
+
+## TODO
+1. Setup local evaluation for the competition metric
+2. Do more EDA on the available data

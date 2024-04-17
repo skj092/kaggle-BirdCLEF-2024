@@ -8,12 +8,21 @@ from config import Config
 from dataset import get_fold_dls
 from models import BirdClefModel
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
+from lightning.pytorch.loggers import WandbLogger
+import wandb
+from dotenv import load_dotenv
+import os
+import pickle
+
+load_dotenv()
 warnings.filterwarnings("ignore")
 pl.seed_everything(Config.seed, workers=True)
+# wandb.login(key=os.getenv("WANDB_API_KEY"))
 
 
 def run_training(df_train, df_valid):
     print("Running training...")
+    # logger = WandbLogger(project="birdclef2024", name="trial_1")
     logger = None
 
     dl_train, dl_val, ds_train, ds_val = get_fold_dls(df_train, df_valid)
@@ -76,6 +85,10 @@ def main():
     df_valid = df_valid.sample(n=100)
 
     birds = list(df_train.primary_label.unique())
+    # with open("birds.pkl", "wb") as f:
+    #    pickle.dump(birds, f)
+    # print(f"saved birds to birds.pkl")
+
     missing_birds = list(
         set(list(df_train.primary_label.unique())).difference(
             list(df_valid.primary_label.unique())
