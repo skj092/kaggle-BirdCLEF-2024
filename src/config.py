@@ -5,7 +5,7 @@ class Config:
     use_aug = False
     num_classes = 182
     batch_size = 64
-    epochs = 12
+    epochs = 2
     PRECISION = 16
     PATIENCE = 8
     seed = 2023
