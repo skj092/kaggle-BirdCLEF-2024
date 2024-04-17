@@ -47,4 +47,4 @@ class test_config:
     DURATION = 5
     LR = 5e-4
 
-    model_ckpt = "/home/sonu/personal/kaggle-BirdCLEF/src/exp1/last.ckpt"
+    model_ckpt = "/home/sonu/personal/kaggle-BirdCLEF/exp1/last.ckpt"
