@@ -58,6 +58,9 @@ Pytorch Lightning Inference
 * We chop this first array to multiple array considering each mini audio of length 5 second (5 * `sr`). So a 20s audio become 4 mini audios of 5 second.
 * No, we convert this mini audio vector to spectrogram. We get spectrogram of shape (128 * x), we can confiture what shape we want.
 
+## Submission
+1. Data: 25% | Ecpoch 2 | LB: 0.57
+
 ## Resources
 
 1. Convert Audio To Spectrogram: <https://www.kaggle.com/code/nischaydnk/split-creating-melspecs-stage-1>
