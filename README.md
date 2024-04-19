@@ -25,44 +25,15 @@
 * When we make batch of it the shape will be (bs, 3, 128, 201)
 * Model will give output of shape (bs, num_classes), i.e. (bs, 182)
 
-## Pipeline
+## Status
 
-### 1. Convert the audio to spectrogram and train a simple image classification model
+1. Setup local evaluation for the competition metric
+2. Do more EDA on the available data
+3. Apply augmentation in the next submission.
 
-Pytorch Lightning Inference
+# To Learn
 
-1. import necessary libraries
-2. Define configs
-3. define functions:
-    * computer melspec
-    * mono_to_clolor
-    * crop or pad
-4. read train csv file
-5. Update config num_classes wth totoal number of unique primary labels
-6. Create test dataframe with filename, name, id ,path columns
-7. def transform for augmentation
-8. Define dataset class
-
-## Convert Audio to Image
-
-* read train metadata
-* Create a new column secondary label and len_sec_labels
-* Split the data into train ad valid
-* Add path of corresponding audio file
-* Call audion to image with duriation *samplerate* 0.666
-
-* Read an audio file using soundfile.read method
-* When you read an audio file using soundfile.read it return a tuple of length two.
-* First value of the tuple is an array of length t * sr where `t` is the time of audio file and `sr` is the sample ratio of audio file. Second value of the tuple is an integer value which is sample ratio of the audio file.
-* For example if I read an audio file of time 19 second, it will return a tuple (audio_vec, sr), where len(audio_vec) = 19* 32000. and sr = 32000.
-* We chop this first array to multiple array considering each mini audio of length 5 second (5 * `sr`). So a 20s audio become 4 mini audios of 5 second.
-* No, we convert this mini audio vector to spectrogram. We get spectrogram of shape (128 * x), we can confiture what shape we want.
-
-## Submission
-
-1. Data: 25% | Ecpoch 2 | LB: 0.57
-
-## How do we represet sound digitally
+## 1. What is an audio?
 
 To digitize a sound wave we must turn the signal into a series of numbers so that we can input it into our models. This is done by measuring the amplitude of the sound at fixed intervals of time.
 
@@ -70,20 +41,45 @@ To digitize a sound wave we must turn the signal into a series of numbers so tha
 
 Each such measurement is called a sample, and the sample rate is the number of samples per second. For instance, a common sampling rate is about 44,100 samples per second. That means that a 10-second music clip would have 441,000 samples!
 
-## Resources
+## 3. How to preprocess audio data?
+
+# Pipeline
+
+## 1. Data Preprocessing
+
+1. Read the meta data dataframe
+2. Split the data into train and valid
+3. Add a column for path of the audio file
+4. Use this dataframe to convert audio to image
+
+## 2. Convert Audio to Image
+
+1. Read an audio file using soundfile.read method
+2. Chop the audio file into multiple audio files of 5 second each
+3. Convert all the audio files to spectrogram
+4. Stack all the images using numpy
+5. Save the image to disk
+
+## 3. Creating Dataset and Dataloader
+
+1. Use train and valid dataframe to create a dataset
+2. Read the row of the dataframe
+3. Load the corresponding saved numpy file with custom max number of images
+4. While training select one of the image randomly
+5. Convert to tensor, augmentate it
+6. Stack 2 duplicate images to make it 3 channel
+7. Normalize the image
+8. Create a batch of 64 images to pass it to model.
+
+## 4. Model and Training
+
+1. Using tf_efficientnet_b0_ns model from timm
+2. Take a batch of images and target.
+3. If mixup is true, calculate mixup loss else calculate normal loss
+
+## 5. Resources
 
 1. Convert Audio To Spectrogram: <https://www.kaggle.com/code/nischaydnk/split-creating-melspecs-stage-1>
 2. Pytorch Lightning Inferece: <https://www.kaggle.com/code/nischaydnk/birdclef-2023-pytorch-lightning-inference>
 3. Pytorch LIghtning training: <https://www.kaggle.com/code/nischaydnk/birdclef-2023-pytorch-lightning-training-w-cmap>
 4. Audio Deep Learning: <https://www.kaggle.com/competitions/birdclef-2024/discussion/491668>
-
-------------------------------------------
-
-1. What is an audio?
-2. How to represent audio digitally?
-3. How to preprocess audio data?
-4. Whole pipeline in mathematical term.
-
-## TODO
-1. Setup local evaluation for the competition metric
-2. Do more EDA on the available data
