@@ -39,10 +39,10 @@ class Config:
     duration = 5
     fmin = 0
     fmax = None
-    data_dir = Path("/home/sonu/personal/BirdCLEF/data")
+    data_dir = Path("/teamspace/studios/this_studio/kaggle-BirdCLEF-2024/data")
     audios_path = data_dir / "train_audio"
-    out_dir_train = Path("specs/train")
-    out_dir_valid = Path("specs/valid")
+    out_dir_train = Path(data_dir/"specs/train")
+    out_dir_valid = Path(data_dir/"specs/valid")
 
 
 def add_path_df(df):
@@ -102,7 +102,7 @@ class AudioToImage:
             for i in range(0, max(1, len(audio) - self.audio_length + 1), self.step)
         ]
         audios[-1] = crop_or_pad(audios[-1], length=self.audio_length)
-        print(f"Number of samples: {len(audios)}")
+        # print(f"Number of samples: {len(audios)}")
         images = [self.audio_to_image(audio) for audio in audios]
         images = np.stack(images)
 
@@ -126,7 +126,8 @@ def get_audios_as_images(df, train=True):
     mapper = joblib.delayed(converter)
     tasks = [mapper(row) for row in df.itertuples(False)]
     # take a subset of the data
-    pool(tqdm(tasks[:5]))
+    # pool(tqdm(tasks[:5]))
+    pool(tqdm(tasks))
 
 
 def main():

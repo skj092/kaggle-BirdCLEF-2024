@@ -50,14 +50,14 @@ def run_training(df_train, df_valid):
     callbacks_to_use = [checkpoint_callback, early_stop_callback]
 
     trainer = pl.Trainer(
-        # gpus=0,
         val_check_interval=0.5,
         deterministic=True,
         max_epochs=Config.epochs,
         logger=logger,
         # auto_lr_find=False,
         callbacks=callbacks_to_use,
-        # precision=Config.PRECISION, accelerator="gpu"
+        precision=Config.PRECISION, 
+        accelerator="gpu"
     )
 
     print("Running trainer.fit")
@@ -74,6 +74,7 @@ def main():
     print(df_train.head())
 
     Config.num_classes = len(df_train.primary_label.unique())
+    print(f"number of classes", Config.num_classes)
 
     df_train = pd.concat(
         [df_train, pd.get_dummies(df_train["primary_label"])], axis=1)
@@ -81,8 +82,8 @@ def main():
         [df_valid, pd.get_dummies(df_valid["primary_label"])], axis=1)
 
     # Take a subset
-    df_train = df_train.sample(n=100)
-    df_valid = df_valid.sample(n=100)
+    # df_train = df_train.sample(n=100)
+    # df_valid = df_valid.sample(n=100)
 
     birds = list(df_train.primary_label.unique())
     # with open("birds.pkl", "wb") as f:

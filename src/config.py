@@ -5,7 +5,7 @@ class Config:
     use_aug = False
     num_classes = 182
     batch_size = 64
-    epochs = 2
+    epochs = 12
     PRECISION = 16
     PATIENCE = 8
     seed = 2023
@@ -15,7 +15,7 @@ class Config:
     use_mixup = True
     mixup_alpha = 0.2
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    data_root = "/home/sonu/personal/kaggle-BirdCLEF/data"
+    data_root = "/teamspace/studios/this_studio/kaggle-BirdCLEF-2024/data"
     train_images = data_root + "/specs/train/"
     valid_images = data_root + "/specs/valid/"
     train_path = data_root + "/train.csv"
@@ -27,7 +27,7 @@ class Config:
 
 
 class test_config:
-    num_classes = 264
+    num_classes = 182
     batch_size = 12
     PRECISION = 16
     seed = 2023

@@ -92,13 +92,3 @@ class BirdClefModel(pl.LightningModule):
         self._logits.append(outputs["logits"])
         self._targets.append(outputs["targets"])
         self._val_loss.append(outputs["val_loss"])
-
-    def on_validation_epoch_end(self):
-        output_val = torch.cat(
-            self._logits, dim=0).sigmoid().cpu().detach().numpy()
-        target_val = torch.cat(self._targets, dim=0).cpu().detach().numpy()
-        avg_loss = torch.stack(self._val_loss).mean()
-        print(output_val.shape, target_val.shape, avg_loss)
-        score = sklearn.metrics.roc_auc_score(
-            target_val, output_val, average="macro")
-        print(f"Validation AUC: {score}")
